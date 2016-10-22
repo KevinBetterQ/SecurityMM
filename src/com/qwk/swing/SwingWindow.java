@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -55,7 +56,7 @@ public class SwingWindow {
 		Font bigFont1 = new Font("serif", Font.BOLD, 20);
 		JLabel methLabelLabel = new JLabel("请选择加密/解密方式：");
 		JLabel signLabel = new JLabel("请选择数字签名方式：");
-		JLabel signMM = new JLabel("密钥:");
+		JLabel signMM = new JLabel("签名密钥:");
 		signMM.setFont(bigFont1);
 		JLabel signMM2 = new JLabel("密钥:");
 		signMM2.setFont(bigFont1);
@@ -174,16 +175,32 @@ public class SwingWindow {
 			}else if (methodItem.equals("DES")) {   //调用DES加密方法，密码只能为8位
 				String in = writeText.getText();
 				String mm = MMcrypt.getText();
-				String out = QwkDES.encryptDES(in, mm); //调用AES加密方式，密码只能为 16位
+				String out = QwkDES.encryptDES(in, mm); 
 				showText.setText(null);
 				showText.append(out);
-			}else if (methodItem.equals("AES")) {
+			}else if (methodItem.equals("AES")) {//调用AES加密方式，密码只能为 16位
 				String in = writeText.getText();
 				String mm = MMcrypt.getText();
-				String out = QwkAES.encryptAES(in, mm);
+				int length = mm.length();
+				if(length == 16){
+					String out = QwkAES.encryptAES(in, mm);
+					showText.setText(null);
+					showText.append(out);
+				}else{
+					JOptionPane.showMessageDialog(null, "AES密钥只支持16位 ", "Sorry ", JOptionPane.ERROR_MESSAGE);
+				}
+			}else if (methodItem.equals("PBE")) {
+				String in = writeText.getText();
+				String mm = MMcrypt.getText();
+				String out = QwkPBE.encryptPBE(in, mm);
 				showText.setText(null);
 				showText.append(out);
-			}else if (methodItem.equals("PBE")) {
+				
+			}else if (methodItem.equals("DH")) {
+				
+				
+			}else if (methodItem.equals("RSA")) {
+				
 				
 			}
 			
@@ -219,10 +236,26 @@ public class SwingWindow {
 			}else if (methodItem.equals("AES")) {
 				String in = writeText.getText();
 				String mm = MMcrypt.getText();
-				String out = QwkAES.dectyptAES(in, mm);
+				int length = mm.length();
+				if(length == 16){
+					String out = QwkAES.dectyptAES(in, mm);
+					showText.setText(null);
+					showText.append(out);
+				}else{
+					JOptionPane.showMessageDialog(null, "AES密钥只支持16位 ", "Sorry ", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}else if (methodItem.equals("PBE")) {
+				String in = writeText.getText();
+				String mm = MMcrypt.getText();
+				String out = QwkPBE.dectyptPBE(in, mm);
 				showText.setText(null);
 				showText.append(out);
-			}else{
+			}
+			
+			
+			
+			else{
 				showText.setText("");
 				showText.append("对不起，暂不支持此解密方式");
 			}
@@ -249,6 +282,11 @@ public class SwingWindow {
 			}else if (signItem.equals("SHA")) {
 				String in = writeText.getText();
 				String out = QwkSHA.jdkSHA1(in);
+				showText.setText(null);
+				showText.append(out);
+			}else if (signItem.equals("MAC")) {
+				String in = writeText.getText();
+				String out = QwkHmac.bcHmacMD5(in);
 				showText.setText(null);
 				showText.append(out);
 			}

@@ -18,7 +18,7 @@ public class QwkHmac {
 
 	public static void main(String[] args) {
 		jdkHmacMD5();
-		bcHmacMD5();
+		//bcHmacMD5();
 	}
 
 	public static void jdkHmacMD5() {
@@ -38,7 +38,7 @@ public class QwkHmac {
 		}
 	}
 	
-	public static void bcHmacMD5() {
+	public static String bcHmacMD5(String src) {
 		//使用Hmac类
 		HMac hmac = new HMac(new MD5Digest());
 		hmac.init(new KeyParameter(org.bouncycastle.util.encoders.Hex.decode("aaaaaaaaaa")));
@@ -47,7 +47,8 @@ public class QwkHmac {
 		byte[] hmacMD5Bytes = new byte[hmac.getMacSize()];//执行摘要
 		hmac.doFinal(hmacMD5Bytes, 0);
 		
-		System.out.println("bc hmacMD5 : " + org.bouncycastle.util.encoders.Hex.toHexString(hmacMD5Bytes));
+		//System.out.println("bc hmacMD5 : " + org.bouncycastle.util.encoders.Hex.toHexString(hmacMD5Bytes));
+		return org.bouncycastle.util.encoders.Hex.toHexString(hmacMD5Bytes);
 		
 	}
 }
